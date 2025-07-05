@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeMate X – Your All-in-One AI Phone Protector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style id="app-style">
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #06b6d4;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --dark-bg: #1e1e2e;
+            --dark-card: #2d2d3f;
+            --dark-text: #f8fafc;
+            --light-bg: #f1f5f9;
+            --light-card: #ffffff;
+            --light-text: #334155;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .dark {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .light {
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        .card {
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .card {
+            background-color: var(--dark-card);
+        }
+
+        .light .card {
+            background-color: var(--light-card);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            background: conic-gradient(var(--primary) 85%, #e5e7eb 0);
+        }
+
+        .score-inner {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dark .score-inner {
+            background-color: var(--dark-bg);
+        }
+
+        .light .score-inner {
+            background-color: var(--light-bg);
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-danger {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        .badge-warning {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .badge-success {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .feature-card {
+            height: 130px;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-container {
+            flex: 1;
+            padding-bottom: 70px;
+            overflow-y: auto;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .dark .bottom-nav {
+            background-color: var(--dark-card);
+        }
+
+        .light .bottom-nav {
+            background-color: var(--light-card);
+        }
+
+        .usage-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .usage-progress {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 140px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 18px;
+        }
+
+        .user-message {
+            background-color: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .ai-message {
+            border-bottom-left-radius: 5px;
+        }
+
+        .dark .ai-message {
+            background-color: var(--dark-card);
+        }
+
+        .light .ai-message {
+            background-color: #e2e8f0;
+        }
+
+        .chat-input {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        
+        .active-tab {
+            display: block;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* Switch styling */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:focus + .toggle-slider {
+            box-shadow: 0 0 1px var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .battery-level {
+            width: 60px;
+            height: 25px;
+            border: 2px solid #666;
+            border-radius: 4px;
+            padding: 1px;
+            position: relative;
+        }
+
+        .battery-level:after {
+            content: '';
+            height: 10px;
+            width: 3px;
+            background: #666;
+            display: block;
+            position: absolute;
+            top: 6px;
+            right: -5px;
+        }
+
+        .battery-level-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #10b981 0%, #f59e0b 100%);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark">
+    <div class="app-container">
+        <div class="content-container">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active-tab px-4 py-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold">SafeMate X</h1>
+                    <button id="theme-toggle" class="p-2 rounded-full">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div>
+                
+                <!-- Performance Score -->
+                <div class="card p-4 mb-6">
+                    <h2 class="text-lg font-semibold mb-3 text-center">Phone Health Score</h2>
+                    <div class="score-circle mb-3">
+                        <div class="score-inner">
+                            <span class="text-3xl font-bold">85</span>
+                            <span class="text-xs opacity-70">Good</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn-primary px-6 py-2 rounded-full text-sm font-medium">
+                            <i class="fas fa-bolt mr-1"></i> Optimize Now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Feature Cards -->
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="card feature-card" data-feature="privacy">
+                        <div class="feature-icon text-red-500">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="text-sm font-medium">Privacy Guardian</div>
+                    </div>
+                    <div class="card feature-card" data-feature="performance">
+                        <div class="feature-icon text-blue-500">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="text-sm font-medium">Performance Firewall</div>
+                    </div>
+                    <div class="card feature-card" data-feature="battery">
+                        <div class="feature-icon text-green-500">
+                            <i class="fas fa-battery-three-quarters"></i>
+                        </div>
+                        <div class="text-sm font-medium">Battery Master</div>
+                    </div>
+                </div>
+                
+                <!-- Digital Wellness Summary -->
+                <div class="card p-4 mb-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-lg font-semibold">Digital Wellness</h2>
+                        <a href="javascript:void(0)" class="text-sm text-indigo-500">View Report</a>
+                    </div>
+                    <div class="flex mb-3 items-center">
+                        <div class="text-2xl mr-3">3h 42m</div>
+                        <div class="text-sm opacity-70">Screen time today</div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 text-xs">
+                        <div class="text-center">
+                            <div class="h-16 relative flex items-end mb-1">
+                                <div class="w-full bg-indigo-500 rounded-t" style="height: 60%"></div>
+                            </div>
+                            <span>Mon</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 relative flex items-end mb-1">
+                                <div class="w-full bg-indigo-500 rounded-t" style="height: 40%"></div>
+                            </div>
+                            <span>Tue</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 relative flex items-end mb-1">
+                                <div class="w-full bg-indigo-500 rounded-t" style="height: 80%"></div>
+                            </div>
+                            <span>Wed</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 relative flex items-end mb-1">
+                                <div class="w-full bg-indigo-500 rounded-t" style="height: 50%"></div>
+                            </div>
+                            <span>Thu</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Alert Card -->
+                <div class="card p-4 mb-4 border-l-4 border-yellow-500">
+                    <div class="flex items-start">
+                        <div class="mr-3 text-yellow-500">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium mb-1">3 apps using background location</h3>
+                            <p class="text-sm opacity-70 mb-2">These apps might be draining your battery</p>
+                            <button class="text-sm btn-primary px-3 py-1 rounded">Fix Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Privacy Guardian Tab -->
+            <div id="privacy-tab" class="tab-content px-4 py-6">
+                <div class="flex items-center mb-6">
+                    <button class="mr-3 back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold">Privacy Guardian</h1>
+                </div>
+                
+                <div class="card p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold">App Permissions</h2>
+                        <button class="btn-primary px-4 py-2 rounded-full text-sm">
+                            <i class="fas fa-search mr-1"></i> Scan All
+                        </button>
+                    </div>
+                    
+                    <!-- App Permissions List -->
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-facebook-f text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Facebook</div>
+                                    <div class="flex space-x-1">
+                                        <span class="badge badge-danger">Camera</span>
+                                        <span class="badge badge-danger">Microphone</span>
+                                        <span class="badge badge-danger">Location</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-sm px-3 py-1 rounded bg-red-500 text-white">
+                                Restrict
+                            </button>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-whatsapp text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">WhatsApp</div>
+                                    <div class="flex space-x-1">
+                                        <span class="badge badge-warning">Camera</span>
+                                        <span class="badge badge-warning">Microphone</span>
+                                        <span class="badge badge-success">Contacts</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-sm px-3 py-1 rounded border">
+                                Review
+                            </button>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-instagram text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">Instagram</div>
+                                    <div class="flex space-x-1">
+                                        <span class="badge badge-danger">Camera</span>
+                                        <span class="badge badge-danger">Location</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-sm px-3 py-1 rounded bg-red-500 text-white">
+                                Restrict
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-3">Background Activity</h2>
+                    <p class="text-sm mb-4">These apps have accessed your data in the background recently:</p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fab fa-facebook-f text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-sm">Facebook</div>
+                                    <div class="text-xs opacity-70">Location access 10 mins ago</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fab fa-instagram text-white text-xs"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-sm">Instagram</div>
+                                    <div class="text-xs opacity-70">Camera access 25 mins ago</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Tab -->
+            <div id="performance-tab" class="tab-content px-4 py-6">
+                <div class="flex items-center mb-6">
+                    <button class="mr-3 back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold">Performance Firewall</h1>
+                </div>
+                
+                <div class="card p-4 mb-6">
+                    <h2 class="text-lg font-semibold mb-4">Current RAM Usage</h2>
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="font-medium">3.2 GB / 8 GB</div>
+                        <div class="text-sm text-green-500">Healthy</div>
+                    </div>
+                    <div class="usage-bar mb-4">
+                        <div class="usage-progress bg-green-500" style="width: 40%"></div>
+                    </div>
+                    <button class="btn-primary px-4 py-2 rounded-full text-sm w-full">
+                        <i class="fas fa-broom mr-1"></i> Clean Memory
+                    </button>
+                </div>
+                
+                <div class="card p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold">Running Apps</h2>
+                        <button class="text-sm btn-secondary px-3 py-1 rounded">Auto-Kill</button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-facebook-f text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium">Facebook</div>
+                                    <div class="usage-bar mt-1">
+                                        <div class="usage-progress bg-red-500" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-sm ml-3 text-red-500">540 MB</div>
+                            </div>
+                            <label class="toggle-switch ml-3">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-whatsapp text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium">WhatsApp</div>
+                                    <div class="usage-bar mt-1">
+                                        <div class="usage-progress bg-yellow-500" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-sm ml-3 text-yellow-500">320 MB</div>
+                            </div>
+                            <label class="toggle-switch ml-3">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-instagram text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium">Instagram</div>
+                                    <div class="usage-bar mt-1">
+                                        <div class="usage-progress bg-green-500" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-sm ml-3 text-green-500">180 MB</div>
+                            </div>
+                            <label class="toggle-switch ml-3">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-3">Suspicious Activities</h2>
+                    <div class="border-l-4 border-red-500 pl-3 py-2 mb-3">
+                        <div class="font-medium">TikTok using camera in background</div>
+                        <div class="text-sm opacity-70">2:15 AM today</div>
+                    </div>
+                    <div class="border-l-4 border-yellow-500 pl-3 py-2">
+                        <div class="font-medium">Unknown app accessing contacts</div>
+                        <div class="text-sm opacity-70">Yesterday at 11:23 PM</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Battery Tab -->
+            <div id="battery-tab" class="tab-content px-4 py-6">
+                <div class="flex items-center mb-6">
+                    <button class="mr-3 back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold">AI Battery Master</h1>
+                </div>
+                
+                <div class="card p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h2 class="text-lg font-semibold">Current Status</h2>
+                            <p class="text-sm opacity-70">Last full charge: 8 hours ago</p>
+                        </div>
+                        <div class="relative">
+                            <div class="battery-level">
+                                <div class="battery-level-fill" style="width: 65%"></div>
+                            </div>
+                            <div class="text-lg font-bold absolute -bottom-7 left-1/2 transform -translate-x-1/2">65%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 text-center">
+                        <div class="text-sm opacity-70 mb-1">Estimated remaining time</div>
+                        <div class="text-2xl font-bold">7h 35m</div>
+                        <div class="text-xs opacity-70">Based on your current usage</div>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-6">
+                    <h2 class="text-lg font-semibold mb-3">Top Battery Drainers</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-facebook-f text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium">Facebook</div>
+                                    <div class="usage-bar mt-1">
+                                        <div class="usage-progress bg-red-500" style="width: 32%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-sm ml-3">32%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-map-marker-alt text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium">Google Maps</div>
+                                    <div class="usage-bar mt-1">
+                                        <div class="usage-progress bg-yellow-500" style="width: 18%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-sm ml-3">18%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fab fa-whatsapp text-white"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="font-medium">WhatsApp</div>
+                                    <div class="usage-bar mt-1">
+                                        <div class="usage-progress bg-green-500" style="width: 12%"></div>
+                                    </div>
+                                </div>
+                                <div class="text-sm ml-3">12%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-3">AI Recommendations</h2>
+                    <div class="space-y-3">
+                        <div class="border-l-4 border-green-500 pl-3 py-2">
+                            <div class="font-medium">Lower screen brightness</div>
+                            <div class="text-sm opacity-70">Could save up to 15% battery</div>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-3 py-2">
+                            <div class="font-medium">Turn off Facebook background refresh</div>
+                            <div class="text-sm opacity-70">Could save up to 12% battery</div>
+                        </div>
+                        <div class="border-l-4 border-yellow-500 pl-3 py-2">
+                            <div class="font-medium">Location services always active</div>
+                            <div class="text-sm opacity-70">3 apps using location in background</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Assistant Tab -->
+            <div id="ai-assistant-tab" class="tab-content h-full">
+                <div class="flex items-center p-4 border-b dark:border-gray-700">
+                    <h1 class="text-xl font-bold">AI Assistant</h1>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-messages">
+                        <div class="message ai-message">
+                            <p>Hello! I'm your SafeMate X AI Assistant. Ask me anything about your phone's security, performance, or battery life.</p>
+                        </div>
+                        
+                        <div class="message user-message">
+                            <p>Which app is draining my battery?</p>
+                        </div>
+                        
+                        <div class="message ai-message">
+                            <p>Based on my analysis, Facebook is using 32% of your battery. It's running in the background and using location services. Would you like me to optimize it for you?</p>
+                        </div>
+                        
+                        <div class="message user-message">
+                            <p>Yes please!</p>
+                        </div>
+                        
+                        <div class="message ai-message">
+                            <p>Great! I've turned off background refresh for Facebook and restricted its location access to "while using". This should improve your battery life significantly.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input p-4">
+                        <input type="text" class="flex-1 px-4 py-2 rounded-full dark:bg-gray-800 border dark:border-gray-700 mr-2" placeholder="Type your question...">
+                        <button class="btn-primary p-2 rounded-full">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Family Mode Tab -->
+            <div id="family-mode-tab" class="tab-content px-4 py-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold">Family Mode</h1>
+                    <button class="btn-primary px-3 py-1 rounded-full text-sm">
+                        <i class="fas fa-plus mr-1"></i> Add Member
+                    </button>
+                </div>
+                
+                <div class="card p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-white font-bold">A</span>
+                            </div>
+                            <div>
+                                <div class="font-medium">Aanya</div>
+                                <div class="text-sm opacity-70">12 years old</div>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="space-y-3 mb-4">
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm">Screen time today</div>
+                            <div class="font-medium">2h 15m / 3h</div>
+                        </div>
+                        <div class="usage-bar">
+                            <div class="usage-progress bg-yellow-500" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-clock mr-1"></i> Time Limits
+                        </button>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-ban mr-1"></i> Block Apps
+                        </button>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-calendar mr-1"></i> Schedule
+                        </button>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-chart-bar mr-1"></i> Reports
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-white font-bold">R</span>
+                            </div>
+                            <div>
+                                <div class="font-medium">Rahul</div>
+                                <div class="text-sm opacity-70">15 years old</div>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="space-y-3 mb-4">
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm">Screen time today</div>
+                            <div class="font-medium">4h 30m / 5h</div>
+                        </div>
+                        <div class="usage-bar">
+                            <div class="usage-progress bg-green-500" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-clock mr-1"></i> Time Limits
+                        </button>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-ban mr-1"></i> Block Apps
+                        </button>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-calendar mr-1"></i> Schedule
+                        </button>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded py-2 flex items-center justify-center">
+                            <i class="fas fa-chart-bar mr-1"></i> Reports
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-3">Bedtime Schedule</h2>
+                    <div class="grid grid-cols-7 text-center mb-4">
+                        <div class="p-1">
+                            <div class="rounded-full w-8 h-8 mx-auto flex items-center justify-center bg-indigo-500 text-white font-medium">S</div>
+                        </div>
+                        <div class="p-1">
+                            <div class="rounded-full w-8 h-8 mx-auto flex items-center justify-center bg-indigo-500 text-white font-medium">M</div>
+                        </div>
+                        <div class="p-1">
+                            <div class="rounded-full w-8 h-8 mx-auto flex items-center justify-center bg-indigo-500 text-white font-medium">T</div>
+                        </div>
+                        <div class="p-1">
+                            <div class="rounded-full w-8 h-8 mx-auto flex items-center justify-center bg-indigo-500 text-white font-medium">W</div>
+                        </div>
+                        <div class="p-1">
+                            <div class="rounded-full w-8 h-8 mx-auto flex items-center justify-center bg-indigo-500 text-white font-medium">T</div>
+                        </div>
+                        <div class="p-1">
+                            <div class="rounded-full w-8 h-8 mx-auto flex items-center justify-center bg-indigo-500 text-white font-medium">F</div>
+                        </div>
+                        <div class="p-1">
+                            <div class="rounded-full w-8 h-8 mx-auto flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium">S</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between text-center mb-4">
+                        <div>
+                            <div class="text-sm opacity-70">From</div>
+                            <div class="font-medium">10:00 PM</div>
+                        </div>
+                        <div>
+                            <div class="text-sm opacity-70">To</div>
+                            <div class="font-medium">7:00 AM</div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full py-2 text-sm font-medium text-center border border-gray-300 dark:border-gray-600 rounded">
+                        <i class="fas fa-edit mr-1"></i> Edit Schedule
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content px-4 py-6">
+                <h1 class="text-2xl font-bold mb-6">Settings</h1>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-4">Appearance</h2>
+                    <div class="flex justify-between items-center mb-3">
+                        <div>Dark Mode</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="dark-mode-toggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div>Language</div>
+                        <select class="py-1 px-2 rounded dark:bg-gray-800 border dark:border-gray-700">
+                            <option>English</option>
+                            <option>Hindi</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-4">Subscription</h2>
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center">
+                            <div class="mr-3">
+                                <i class="fas fa-crown text-yellow-500 text-2xl"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium">Free Plan</div>
+                                <div class="text-sm opacity-70">Limited features</div>
+                            </div>
+                        </div>
+                        <button class="btn-primary px-3 py-1 rounded text-sm">
+                            Upgrade
+                        </button>
+                    </div>
+                    
+                    <div class="border border-gray-200 dark:border-gray-700 rounded p-3">
+                        <div class="font-medium mb-2">Pro Plan Benefits:</div>
+                        <ul class="text-sm space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                AI Assistant Chat
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Auto Actions
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Family Mode
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Ad-free experience
+                            </li>
+                        </ul>
+                        <div class="text-center mt-3">
+                            <div class="font-medium">₹49/month or ₹299/year</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-3">Additional Protection</h2>
+                    <p class="text-sm mb-3">Enhance your digital security with recommended tools:</p>
+                    
+                    <div class="flex justify-between items-center border-b pb-3 mb-3">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-shield-alt text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium">SecureVPN</div>
+                                <div class="text-sm opacity-70">Protect your online activity</div>
+                            </div>
+                        </div>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1">
+                            Install
+                        </button>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-virus-slash text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium">MaxGuard</div>
+                                <div class="text-sm opacity-70">Anti-malware protection</div>
+                            </div>
+                        </div>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1">
+                            Install
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-3">Data & Storage</h2>
+                    <div class="flex justify-between items-center mb-3">
+                        <div>Clear App Cache</div>
+                        <button class="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>Reset All Settings</div>
+                        <button class="text-sm bg-red-500 text-white rounded px-3 py-1">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <div class="text-sm opacity-70">SafeMate X</div>
+                    <div class="text-xs opacity-50">Version 2.3.1</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="javascript:void(0)" class="nav-item active" data-tab="dashboard">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <div>Dashboard</div>
+            </a>
+            <a href="javascript:void(0)" class="nav-item" data-tab="ai-assistant">
+                <div class="nav-icon"><i class="fas fa-robot"></i></div>
+                <div>AI Chat</div>
+            </a>
+            <a href="javascript:void(0)" class="nav-item" data-tab="family-mode">
+                <div class="nav-icon"><i class="fas fa-users"></i></div>
+                <div>Family</div>
+            </a>
+            <a href="javascript:void(0)" class="nav-item" data-tab="settings">
+                <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                <div>Settings</div>
+            </a>
+        </div>
+    </div>
+
+    <script id="app-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            
+            function toggleTheme() {
+                if (body.classList.contains('dark')) {
+                    body.classList.remove('dark');
+                    body.classList.add('light');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    if (darkModeToggle) darkModeToggle.checked = false;
+                } else {
+                    body.classList.remove('light');
+                    body.classList.add('dark');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    if (darkModeToggle) darkModeToggle.checked = true;
+                }
+                // Save preference to localStorage
+                localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+            }
+            
+            // Apply saved theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                if (darkModeToggle) darkModeToggle.checked = false;
+            }
+            
+            // Handle theme toggle click
+            themeToggle.addEventListener('click', toggleTheme);
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('change', toggleTheme);
+            }
+            
+            // Tab navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            function showTab(tabId) {
+                // Hide all tabs
+                tabContents.forEach(tab => {
+                    tab.classList.remove('active-tab');
+                });
+                
+                // Remove active class from nav items
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Show selected tab
+                document.getElementById(tabId + '-tab').classList.add('active-tab');
+                
+                // Add active class to clicked nav item
+                document.querySelector(`.nav-item[data-tab="${tabId}"]`).classList.add('active');
+                
+                // Save current tab to localStorage
+                localStorage.setItem('currentTab', tabId);
+            }
+            
+            // Add click event to nav items
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    showTab(tabId);
+                });
+            });
+            
+            // Load saved tab from localStorage
+            const savedTab = localStorage.getItem('currentTab') || 'dashboard';
+            showTab(savedTab);
+            
+            // Feature cards click handlers
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const feature = this.getAttribute('data-feature');
+                    if (feature === 'privacy') {
+                        document.getElementById('dashboard-tab').classList.remove('active-tab');
+                        document.getElementById('privacy-tab').classList.add('active-tab');
+                    } else if (feature === 'performance') {
+                        document.getElementById('dashboard-tab').classList.remove('active-tab');
+                        document.getElementById('performance-tab').classList.add('active-tab');
+                    } else if (feature === 'battery') {
+                        document.getElementById('dashboard-tab').classList.remove('active-tab');
+                        document.getElementById('battery-tab').classList.add('active-tab');
+                    }
+                });
+            });
+            
+            // Back button handlers
+            const backBtns = document.querySelectorAll('.back-btn');
+            backBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('privacy-tab').classList.remove('active-tab');
+                    document.getElementById('performance-tab').classList.remove('active-tab');
+                    document.getElementById('battery-tab').classList.remove('active-tab');
+                    document.getElementById('dashboard-tab').classList.add('active-tab');
+                });
+            });
+            
+            // AI Chat input handler
+            const chatInput = document.querySelector('.chat-input input');
+            const chatSendBtn = document.querySelector('.chat-input button');
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    // Add user message
+                    const userMsgElement = document.createElement('div');
+                    userMsgElement.classList.add('message', 'user-message');
+                    userMsgElement.innerHTML = `<p>${message}</p>`;
+                    chatMessages.appendChild(userMsgElement);
+                    
+                    // Clear input
+                    chatInput.value = '';
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Simulate AI response (would be replaced with actual API call)
+                    setTimeout(() => {
+                        const aiMsgElement = document.createElement('div');
+                        aiMsgElement.classList.add('message', 'ai-message');
+                        aiMsgElement.innerHTML = `<p>This is a prototype. In the full version, the AI will respond to your question: "${message}"</p>`;
+                        chatMessages.appendChild(aiMsgElement);
+                        
+                        // Scroll to bottom again
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                }
+            }
+            
+            chatSendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
